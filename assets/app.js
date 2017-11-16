@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", function() {
         color: "#000"
     }
 
-
     let controller = {
         init: function() {
             // let's get the current settings
@@ -21,7 +20,10 @@ document.addEventListener("DOMContentLoaded", function() {
             // color
             let color  = document.querySelector("#color")
 
-            
+            color.addEventListener("change", function() {
+                
+                model.color = this.value
+            })
             // init the view
             view.init()
         },
@@ -51,10 +53,20 @@ document.addEventListener("DOMContentLoaded", function() {
             model.color = "#000"
 
             view.render();
+        },
+
+        click_on_block: function(block) {
+            let current_collor = controller.getSettings().color
+            console.log(current_collor)
+            block.style.backgroundColor = current_collor
+
+        },
+
+        erase_block: function(block) {
+            block.style.backgroundColor = "#FFF"
         }
 
     }
-
 
     let view = {
         init: function() {
@@ -71,12 +83,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 controller.submit()
             })
 
+
             this.render()
         },
 
         render: function() {
-
-            
             // if we got these values, render the grid
             
             if (controller.getSettings()) {
@@ -87,18 +98,27 @@ document.addEventListener("DOMContentLoaded", function() {
                 let blocks = Number(controller.getSettings().height) * Number(controller.getSettings().width)
                 
                 for (let block = 0; block < blocks; block++) {
-                   
-                // create a block (pixel)
-                let block_div = document.createElement("div")
-                block_div.className = "block"
+                    
+                    // create a block (pixel)
+                    let block_div = document.createElement("div")
+                    block_div.className = "block"
 
-                grid.appendChild(block_div)
+                    //paint
+                    block_div.addEventListener("click", function() {
+                        controller.click_on_block(this)
+                    })
+
+                    // erase pixel
+                    block_div.addEventListener("contextmenu", function(e) {
+                        e.preventDefault()
+                        controller.erase_block(this)
+                    })
+                    grid.appendChild(block_div)
 
                 }
             }
         }
     }
-
 
     controller.init()
 });
