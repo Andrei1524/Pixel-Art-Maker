@@ -6,23 +6,32 @@ document.addEventListener("DOMContentLoaded", function () {
         width: 0,
         color: "#000"
     }
-
+    
     let controller = {
         init: function () {
             // let's get the current settings
 
             // height
             let height = document.querySelector("#height")
-
+            height.addEventListener("input", function() {
+                model.height = 0;
+                model.height = this.value
+                view.render()
+            })
             // width
             let width = document.querySelector("#width")
 
+            width.addEventListener("change", function() {
+                model.width = 0;
+                model.width = this.value
+                view.render()
+            })
             // color
             let color = document.querySelector("#color")
 
             color.addEventListener("change", function () {
-
                 model.color = this.value
+
             })
             // init the view
             view.init()
@@ -52,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
             model.width = 0
             model.color = "#000"
 
-            view.render();
+           
         },
 
         click_on_block: function (block) {
@@ -89,8 +98,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         render: function () {
             // if we got these values, render the grid
-
+            
             if (controller.getSettings()) {
+                grid.innerHTML = ""
                 grid.style.gridTemplateColumns = "repeat(" + controller.getSettings().width + ", 20px)"
                 grid.style.gridTemplateRows = "repeat(" + controller.getSettings().height + ", 20px)"
 
